@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# scripts to run the Clusterizer; this 
+# script is meant for batch submission with qsub
+#  (SGE batch system)
+
+#$ -V
+#$ -cwd
+
+aliroot -b -q "RunClusterizer.C($1, $2, $3, $4)"

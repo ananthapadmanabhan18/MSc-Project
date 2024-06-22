@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aliroot -l -b -q "Analysis.C($1, $2, $3, $4)"

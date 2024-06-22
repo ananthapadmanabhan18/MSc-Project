@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+#simFolder="/home/apmnair18/Documents/MSc_Project/Simulation/Simulation_Outputs/Output_pdg22_nevent100/"
+#geomFile="/home/apmnair18/Documents/MSc_Project/Simulation/GeometryFiles/geometry.txt"
+
+aliroot -l -b -q "MCInfo.C($1, $2, $3, $4)"
+
