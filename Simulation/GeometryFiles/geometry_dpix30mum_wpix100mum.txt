@@ -1,0 +1,64 @@
+# Volume Name            Material   C-X   C-Y    X     Y      Z 
+  COMPOSITION_PAD_S0       PureW       0     0     2.     2.      0.35
+  COMPOSITION_PAD_S1       G10         0     0     2.     2.      0.05
+  COMPOSITION_PAD_S2       SiPad       0     0     2.     2.      0.05
+  COMPOSITION_PAD_S3       G10         0     0     2.     2.      0.05
+  COMPOSITION_PAD_S4       Cu          0     0     2.     2.      0.01
+  COMPOSITION_PAD_S5       Air         0     0     2.     2.      0.05
+  # Replica of above pad layers to 50 layers
+  COMMAND_NUMBER_OF_PAD_LAYERS 18
+# HCAL layers
+# Volume Name            Material   C-X   C-Y    X     Y      Z 
+  COMPOSITION_HCAL_S0       Cu           0     0     2.     2.      3.0
+  COMPOSITION_HCAL_S1       Scint        0     0     2.     2.      0.2
+  COMMAND_NUMBER_OF_HCAL_LAYERS 50
+  COMMAND_NUMBER_OF_SEGMENTS 70
+# Strip sectors 
+# Volume Name            Material   C-X   C-Y    X     Y      Z
+  COMPOSITION_PIX_S0       PureW       0     0     2.     2.      0.35
+  COMPOSITION_PIX_S1       G10         0     0     2.     2.      0.05
+  COMPOSITION_PIX_S2       Si          0     0     2.     2.      0.047
+  COMPOSITION_PIX_S3       SiPix       0     0     2.     2.      0.003
+  COMPOSITION_PIX_S4       G10         0     0     2.     2.      0.05
+  COMPOSITION_PIX_S5       Cu          0     0     2.     2.      0.01
+  COMPOSITION_PIX_S6       Air         0     0     2.     2.      0.05
+COMMAND_INSERT_PIX_AT_L4 
+COMMAND_INSERT_PIX_AT_L9 
+# COMMAND_INSERT_STR_AT_L4
+# COMMAND_INSERT_STR_AT_L6
+# COMMAND_INSERT_STR_AT_L8
+#Front Matter definition
+  COMPOSITION_FM_S0        G10         0     0     5.    5.      0.01
+  COMPOSITION_FM_S1        SiStripX    0     0     5.    5.      0.05
+  COMPOSITION_FM_S2        G10         0     0     5.    5.      0.05
+  COMPOSITION_FM_S3        Air         0     0     5.    5.      0.01
+  COMPOSITION_FM_S4        G10         0     0     5.    5.      0.01
+  COMPOSITION_FM_S5        SiStripY    0     0     5.    5.      0.05
+  COMPOSITION_FM_S6        G10         0     0     5.    5.      0.05
+# PIXEL readout
+#  pxel size in cm
+  COMMAND_PIXEL_READOUT_ON       0.01
+# Pad information
+  GLOBAL_PAD_SIZE_X_Y            1
+  GLOBAL_PAD_NX_NY               2
+  GLOBAL_PAD_PPTOL               0.
+  GLOBAL_PAD_SKIN                0.
+# Global information (TOL:1cm of T-T space filled with "AIR")
+  GLOBAL_TOWER_TOL        0.    Air
+  GLOBAL_FOCAL_Z          785.6
+  GLOBAL_NX_TOWER_FOCAL   80
+  GLOBAL_NY_TOWER_FOCAL   80
+  GLOBAL_NSTRIPS	        128
+  GLOBAL_STRIPSIZE_LONG   9.0
+  GLOBAL_STRIPSIZE_WIDTH  0.07
+# New VIRTUAL settings
+  VIRTUAL_N_SEGMENTS      6
+  #                            N   Start End   PadSize  RelThickness  IsPixel    PixelTreshold [eV]
+  #                                Layer Layer
+  VIRTUAL_SEGMENT_LAYOUT_N0       0    3           1.0           1.0        0                  400000
+  VIRTUAL_SEGMENT_LAYOUT_N1       4    4           0.1           1.0        1                  4000
+  VIRTUAL_SEGMENT_LAYOUT_N2       5    8           1.0           1.0        0                  400000
+  VIRTUAL_SEGMENT_LAYOUT_N3       9    9           0.1           1.0        1                  4000
+  VIRTUAL_SEGMENT_LAYOUT_N4      10   14           1.0           1.0        0                  500000
+  VIRTUAL_SEGMENT_LAYOUT_N5      14   19           1.0           1.0        2                  500000
+#EOF
