@@ -3,3 +3,6 @@ LogBook/Outputs/
 Rough/
 Simulation_outputs/
 Analysis_outputs/
+Simulation/OCDBrec.root
+Simulation/OCDBsim.root
+References/ALICE-TDR-022.pdf
