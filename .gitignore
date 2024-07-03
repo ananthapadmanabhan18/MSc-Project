@@ -1,5 +1,5 @@
 LogBook/Outputs/
-.vscode/
+# .vscode/
 Rough/
 Simulation_outputs/
 Analysis_outputs/

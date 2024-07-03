@@ -33,7 +33,7 @@ void mci(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
 
 	char dataSampleTag[200] = "";
 	char simFolder[200] ="/home/apmnair18/Documents/MSc-Project/Simulation_outputs/pdg111_nevents199";
-	char infoOutputFileDir[200] = "../Out";
+	char infoOutputFileDir[200] = "../../test_outputs";
 
 	const Float_t profileRadius = 5; // [cm] distance for collecting digits for shower profile
 

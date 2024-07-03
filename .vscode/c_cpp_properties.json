@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/AliRoot/latest-master-o2/**",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/ROOT/v6-30-01-alice5-6/include/**",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/FOCAL/0-local1/include/**",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/FOCAL/0-local1/include/",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/FOCAL/latest",
+                "/home/apmnair18/alice/sw/ubuntu2204_x86-64/VMC/v2-0-44/include/vmc/"
+            ],
+            "defines": [],
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/home/apmnair18/alice/sw/ubuntu2204_x86-64/GCC-Toolchain/v12.2.0-alice1-5/bin/g++"
+        }
+    ],
+    "version": 4
+}
