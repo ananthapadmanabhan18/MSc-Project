@@ -24,7 +24,7 @@
 using namespace std;
 
 
-void mci(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
+void mci_test(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
 {
 	// Parameteres for getting weighting function info
 	Float_t infoParameterSigma = 1.0;
@@ -317,7 +317,14 @@ void mci(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
 
 					if(part->GetPdgCode() == 22 && part->GetFirstDaughter()>=0)
 					{
-
+						auto cdaughter = stack->Particle(part->GetFirstDaughter());
+						if (cdaughter->Vz() < z_FOCAL_front)
+						{
+							conv_flag[iTrk] = 1; 
+						}
+						cVx[iTrk] = cdaughter->Vx();
+						cVy[iTrk] = cdaughter->Vy();// cVi is for the photons
+						cVz[iTrk] = cdaughter->Vz();
 					}
 
 					iTrk++;
@@ -325,6 +332,20 @@ void mci(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
 				}//loop over all the daughters
 
 			}// end of if statement that the primary has any daughters
+
+		// Digitize the events
+		digitizer->Hits2Digits(treeH->GetBranch("FOCAL"));
+		TClonesArray *digitsArray = digitizer->GetSDigits();
+
+		TH2F **histograms = new TH2F *[nSegments];
+		TH1D **histograms1D = new TH1D *[nSegments];
+		Int_t nCol,nRow;
+		Float_t sizeX = geometry->GetFOCALSizeX();
+		Float_t sizeY = geometry->GetFOCALSizeY();
+
+		char name[200] = "Original";
+		char name2[200] = "Projection";
+
 
 
 
