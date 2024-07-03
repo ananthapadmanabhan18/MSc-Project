@@ -58,8 +58,7 @@ do
   ##########################
   #     Run Simulation     #
   ##########################
-  /home/apmnair18/alice/sw/ubuntu2204_x86-64/AliDPG/master-local1/MC/dpgsim.sh --run $run --mode $mode --detector $detector --uid $uid --nevents $nevents --generator $generator --simulation $simulation --focalGeometryFile $geometry_location --pdg $pdg --etamin $etamin --etamax $etamax --ptmin $ptmin --ptmax $ptmax
-
+  source /home/apmnair18/alice/sw/ubuntu2204_x86-64/AliDPG/master-local1/bin/aliroot_dpgsim.sh --run $run --mode $mode --detector $detector --uid $uid --nevents $nevents --generator $generator --simulation $simulation --focalGeometryFile $geometry_location --pdg $pdg --etamin $etamin --etamax $etamax --ptmin $ptmin --ptmax $ptmax --jobs 20 --debug
 
   ###############################################
   # Move the GRP folder to the target directory #
