@@ -55,10 +55,6 @@ do
   echo "Pt range              :       $ptmin - $ptmax"
 
 
-  ##########################
-  #     Run Simulation     #
-  ##########################
-  source /home/apmnair18/alice/sw/ubuntu2204_x86-64/AliDPG/master-local1/bin/aliroot_dpgsim.sh --run $run --mode $mode --detector $detector --uid $uid --nevents $nevents --generator $generator --simulation $simulation --focalGeometryFile $geometry_location --pdg $pdg --etamin $etamin --etamax $etamax --ptmin $ptmin --ptmax $ptmax --jobs 20 --debug
 
   ###############################################
   # Move the GRP folder to the target directory #
@@ -74,9 +70,13 @@ do
   for file in "$SOURCE_DIR"/*.root; do
     if [[ "$file" != "$SOURCE_DIR/OCDBsim.root" && "$file" != "$SOURCE_DIR/OCDBrec.root" ]]; then
       mv "$file" "$TARGET_DIR/"
+      # echo "$file"
     fi
   done
   mv "$SOURCE_DIR/grpdump.sh" "$TARGET_DIR/"
+
+  # echo "$SOURCE_DIR/grpdump.sh"
+
   mv "$SOURCE_DIR/gphysi.dat" "$TARGET_DIR/"
   mv "$SOURCE_DIR/sim.log" "$TARGET_DIR/"
   mv "$SOURCE_DIR/simwatch.log" "$TARGET_DIR/"

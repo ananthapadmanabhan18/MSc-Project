@@ -1,4 +1,28 @@
+#include <iostream>
+#include <TFile.h>
+#include <TTree.h>
+#include <TSystem.h>
+#include <TProfile.h>
+#include <TProfile2D.h>
+#include <TMath.h>
+#include <TF2.h>
+#include <TF1.h>
+#include <TClonesArray.h>
+#include <TObjArray.h>
+#include <AliRunLoader.h>
+#include <AliFOCAL.h>
+#include <AliFOCALLoader.h>
+#include <AliFOCALGeometry.h>
+#include <AliFOCALDigitizer.h>
+#include <AliFOCALdigit.h>
+#include <AliRun.h>
+#include <AliStack.h>
+#include <THStack.h>
+#include <TParticle.h>
 
+
+
+using namespace std;
 
 void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent)
 {
@@ -9,8 +33,8 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 	Float_t infoParameterHistRadius = 5;
 
 	char dataSampleTag[200] = "";
-	char simFolder[200] ="/home/apmnair18/Documents/MSc_Project/Simulation_outputs/pdg111_nevents199";
-	char infoOutputFileDir[200] = "/home/apmnair18/Documents/MSc_Project/Analysis_outputs/pdg111_nevents199";
+	char simFolder[200] ="/home/apmnair18/Documents/MSc-Project/Simulation_outputs/pdg111_nevents199";
+	char infoOutputFileDir[200] = "../../test_outputs/";
 
 	const Float_t profileRadius = 5; // [cm] distance for collecting digits for shower profile
 
@@ -18,7 +42,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 
 	// Get geometry;
 	AliFOCALGeometry *geometry = new AliFOCALGeometry();
-	const Char_t *detectorGeometryFile = gSystem->ExpandPathName("/home/apmnair18/Documents/MSc_Project/Simulation/GeometryFiles/geometry.txt");
+	const Char_t *detectorGeometryFile = gSystem->ExpandPathName("/home/apmnair18/Documents/MSc-Project/Simulation/GeometryFiles/geometry.txt");
 	geometry->Init(detectorGeometryFile);
 	Int_t nSegments = geometry->GetVirtualNSegments();
 
@@ -85,7 +109,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		Long_t id, size, flags, mt;
 		if (gSystem->GetPathInfo(filename, &id, &size, &flags, &mt) == 1)
 		{
-			cout << "ERROR: FOLDER: " << nfolder << endl;
+			cout << "ERROR: FOLDER (galice): " << nfolder << endl;
 			continue;
 		}
 
@@ -94,7 +118,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 
 		if (gSystem->GetPathInfo(filenameHits, &id, &size, &flags, &mt) == 1)
 		{
-			cout << "ERROR: FOLDER: " << nfolder << endl;
+			cout << "ERROR: FOLDER (focalhits): " << nfolder << endl;
 			continue;
 		}
 
@@ -103,7 +127,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 
 		if (gSystem->GetPathInfo(filenameKin, &id, &size, &flags, &mt) == 1)
 		{
-			cout << "ERROR: FOLDER: " << nfolder << endl;
+			cout << "ERROR: FOLDER (kinematics): " << nfolder << endl;
 			continue;
 		}
 

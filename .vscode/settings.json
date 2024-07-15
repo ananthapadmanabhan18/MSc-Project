@@ -4,6 +4,14 @@
         "mci.C": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
-        "mci_test.C": "cpp"
+        "mci_test.C": "cpp",
+        "AliPHOSSetCDB.C": "cpp",
+        "cmath": "cpp",
+        "RunClusterizer.C": "cpp",
+        "ClusterizerParameters.C": "cpp",
+        "ClusterizerHitLoader.C": "cpp",
+        "ClusterizerDigitLoader.C": "cpp",
+        "Clusterizer.C": "cpp",
+        "ClusterizerDataSample.C": "cpp"
     }
 }
