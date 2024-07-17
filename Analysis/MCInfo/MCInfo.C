@@ -33,7 +33,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 	Float_t infoParameterHistRadius = 5;
 
 	char dataSampleTag[200] = "";
-	char simFolder[200] ="/home/apmnair18/Documents/MSc-Project/Simulation_outputs/pdg111_nevents199";
+	char simFolder[200] ="..//..//Simulation_outputs/pdg111_nevents199";
 	char infoOutputFileDir[200] = "../../test_outputs/";
 
 	const Float_t profileRadius = 5; // [cm] distance for collecting digits for shower profile
@@ -42,7 +42,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 
 	// Get geometry;
 	AliFOCALGeometry *geometry = new AliFOCALGeometry();
-	const Char_t *detectorGeometryFile = gSystem->ExpandPathName("/home/apmnair18/Documents/MSc-Project/Simulation/GeometryFiles/geometry.txt");
+	const Char_t *detectorGeometryFile = gSystem->ExpandPathName("..//..//Simulation/GeometryFiles/geometry.txt");
 	geometry->Init(detectorGeometryFile);
 	Int_t nSegments = geometry->GetVirtualNSegments();
 
@@ -80,7 +80,10 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 	Float_t *chi2 = new Float_t[2 * nSegments];
 	Int_t *ndef = new Int_t[2 * nSegments];
 
-	// profile histos
+
+
+
+	// Profile histos
 	TH2F **showProf2DEvent = new TH2F *[nSegments];
 	TH1F **showProf1DEvent = new TH1F *[nSegments];
 	for (Int_t i = 0; i < nSegments; i++)
@@ -97,39 +100,41 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		showProf1DEvent[i] = new TH1F(Form("profEvent_%d", i), Form("Shower profile seg %d;r (cm);dN/rdr", i), nBins + 1, -0.5 * cellSize, lim);
 	}
 
+
+
+
+
 	// Loop over folders
 	for (Int_t nfolder = startFolder; nfolder <= endFolder; nfolder++)
 	{
 
-		cout << "FOLDER: " << nfolder << endl;
+
+
+		cout<<"FOLDER: "<<folder << endl;
+
+		Long_t id, size, flags, mt;
+
+
 
 		char filename[200];
 		sprintf(filename, "%s/%i/%s", simFolder, nfolder, "galice.root");
+		if (gSystem->GetPathInfo(filename, &id, &size, &flags, &mt) == 1){cout << "Error in galice.root in folder : " << nfolder << endl;continue;}
 
-		Long_t id, size, flags, mt;
-		if (gSystem->GetPathInfo(filename, &id, &size, &flags, &mt) == 1)
-		{
-			cout << "ERROR: FOLDER (galice): " << nfolder << endl;
-			continue;
-		}
+
+
 
 		char filenameHits[200];
 		sprintf(filenameHits, "%s/%i/%s", simFolder, nfolder, "FOCAL.Hits.root");
+		if (gSystem->GetPathInfo(filenameHits, &id, &size, &flags, &mt) == 1){cout << "Error in FOCAL.Hits.root in folder : " << nfolder << endl;continue;}
 
-		if (gSystem->GetPathInfo(filenameHits, &id, &size, &flags, &mt) == 1)
-		{
-			cout << "ERROR: FOLDER (focalhits): " << nfolder << endl;
-			continue;
-		}
+
 
 		char filenameKin[200];
 		sprintf(filenameKin, "%s/%i/%s", simFolder, nfolder, "Kinematics.root");
+		if (gSystem->GetPathInfo(filenameKin, &id, &size, &flags, &mt) == 1){cout << "Error in Kinematics.root in folder: " << nfolder << endl;continue;}
 
-		if (gSystem->GetPathInfo(filenameKin, &id, &size, &flags, &mt) == 1)
-		{
-			cout << "ERROR: FOLDER (kinematics): " << nfolder << endl;
-			continue;
-		}
+
+
 
 		// Alice run loader
 		AliRunLoader *fRunLoader = AliRunLoader::Open(filename);
@@ -141,12 +146,9 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		}
 		cout << "Got runloader" << endl;
 
-		if (!fRunLoader->GetAliRun())
-			fRunLoader->LoadgAlice();
-		if (!fRunLoader->TreeE())
-			fRunLoader->LoadHeader();
-		if (!fRunLoader->TreeK())
-			fRunLoader->LoadKinematics();
+		if (!fRunLoader->GetAliRun()){fRunLoader->LoadgAlice();}
+		if (!fRunLoader->TreeE()){fRunLoader->LoadHeader();}
+		if (!fRunLoader->TreeK()){fRunLoader->LoadKinematics();}
 
 		gAlice = fRunLoader->GetAliRun();
 
@@ -155,25 +157,27 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		AliFOCALLoader *fFOCALLoader = dynamic_cast<AliFOCALLoader *>(fRunLoader->GetLoader("FOCALLoader"));
 		fFOCALLoader->LoadHits("READ");
 
-		// Output ttree definition
-
+		// Creating the output File
 		cout << "Open output file " << endl;
 		gSystem->mkdir(infoOutputFileDir, true);
+
+
+
+
+		/***************************************
+		Creating the output TTree for the MCInfo
+		****************************************/
 
 		TFile *f = new TFile(Form("%s/MCInfo_%s_%i.root", infoOutputFileDir, dataSampleTag, nfolder), "RECREATE");
 		f->cd();
 		TTree *tInfo = new TTree("MCInfo", "MonteCarlo and other information");
-
 		tInfo->Branch("Folder", &folder, "Folder[200]/C");
 		tInfo->Branch("Event", &event, "Event/I");
-
-		// Particles, mother + daughters
 		tInfo->Branch("PdgCode", pdgCode, "PdgCode[4]/I");
 		tInfo->Branch("Energy", e, "Energy[4]/F");
 		tInfo->Branch("Pt", pt, "Pt[4]/F");
 		tInfo->Branch("Phi", phi, "Phi[4]/F");
 		tInfo->Branch("Theta", theta, "Theta[4]/F");
-
 		tInfo->Branch("Vx", Vx, "Vx[4]/F");
 		tInfo->Branch("Vy", Vy, "Vy[4]/F");
 		tInfo->Branch("Vz", Vz, "Vz[4]/F");
@@ -181,7 +185,6 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		tInfo->Branch("cVx", cVx, "cVx[4]/F");
 		tInfo->Branch("cVy", cVy, "cVy[4]/F");
 		tInfo->Branch("cVz", cVz, "cVz[4]/F");
-
 		tInfo->Branch("TotalEnergy", totalE, "TotalEnergy[40]/F");
 		tInfo->Branch("MaxEnergy", maxE, "MaxEnergy[40]/F");
 		tInfo->Branch("Sigma", sigma, "Sigma[40]/F");
@@ -189,7 +192,14 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 		tInfo->Branch("Chi2", chi2, "Chi2[40]/F");
 		tInfo->Branch("NDEF", ndef, "NDEF[40]/I");
 
-		// profile histos
+
+
+
+
+
+		/******************************
+		Creating the Profile Histograms
+		*******************************/
 		TProfile2D **showProf2D = new TProfile2D *[nSegments];
 		TProfile **showProf1D = new TProfile *[nSegments];
 		TProfile **showProf1D_dEdr = new TProfile *[nSegments];
@@ -208,58 +218,62 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 			showProf1D_dEdr[i] = new TProfile(Form("prof_dEdr_%d", i), Form("Shower profile seg %d;r (cm);dN/dr", i), nBins + 1, -0.5 * cellSize, lim);
 		}
 
-		// Loop over events in the folder
+
+
+
+
+
+		/*******************************************************************
+		Looping Over the Events and Filling the TTree and Profile Histograms
+		********************************************************************/
 		for (Int_t ievt = startEvent; ievt <= endEvent; ievt++)
 		{
 
 			totalEvents++;
 
-			/***************************************************************************
-			 *  LOAD EVENT
-			 ***************************************************************************/
-
 			strcpy(folder, Form("%s/%i", simFolder, nfolder));
 			event = ievt;
 
-			Int_t ie = fRunLoader->GetEvent(ievt);
-			if (ie != 0)
-			{
-				cout << "Error reading event " << ievt << endl;
-				continue;
-			}
+			Int_t ie = fRunLoader->GetEvent(ievt); // Get the event at index ievt
+			if (ie != 0){cout << "Error reading event " << ievt << endl;continue;}
 			
-			TTree *treeH = fFOCALLoader->TreeH();
-			if (!treeH)
-			{
-				std::cout << "TreeH is corrupt\n";
-				break;
-				continue;
-			}
-			cout << "Event: " << ievt << " with " << treeH->GetEntries() << " tracks" << endl;
-			TTree *treeK = fRunLoader->TreeK();
 
-			for (Int_t i = 0; i < 4; i++)
+			TTree *treeH = fFOCALLoader->TreeH();
+			if (!treeH){std::cout << "TreeH is corrupt\n";break;continue;}
+			cout << "Event: " << ievt << " with " << treeH->GetEntries() << " tracks" << endl;
+
+
+			TTree *treeK = fRunLoader->TreeK();
+			if(!treeK){std::cout << "TreeK is corrupt\n";break;continue;}
+
+
+
+			for (Int_t i = 0; i < 4; i++)	// Particle info
 			{
-				pdgCode[i] = 0;
-				e[i] = 0;
-				pt[i] = 0;
-				phi[i] = 0;
-				theta[i] = 0;
-				;
-				Vx[i] = 0;
-				Vy[i] = 0;
-				Vz[i] = 0;
-				conv_flag[i] = 0;
-				cVx[i] = 0;
-				cVy[i] = 0;
-				cVz[i] = 0;
+				pdgCode[i] = 0; 			// PDG code
+				e[i] = 0;					// Energy
+				pt[i] = 0;					// Transverse momentum
+				phi[i] = 0; 				// Azimuthal angle
+				theta[i] = 0; 				// Polar angle
+				Vx[i] = 0; 					// Vertex x
+				Vy[i] = 0;					// Vertex y
+				Vz[i] = 0; 					// Vertex z
+				conv_flag[i] = 0;			// Conversion flag
+				cVx[i] = 0;					// vertex if photon x
+				cVy[i] = 0;					// vertex if photon y
+				cVz[i] = 0;					// vertex if photon z			
 			}
+
+
 
 			AliStack *stack = fRunLoader->Stack();
-			if (stack->GetNprimary() != 1)
-				cout << "More than one primary found; this will lead to unexpected results... " << endl;
 
-			auto primary = stack->Particle(0);
+
+
+			if (stack->GetNprimary() != 1){cout << "More than one primary found; this will lead to unexpected results... " << endl;}
+
+
+			auto primary = stack->Particle(0);    // Primary particle
 			pdgCode[0] = primary->GetPdgCode();
 			e[0] = primary->Energy();
 			pt[0] = primary->Pt();
@@ -268,8 +282,13 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 			Vx[0] = primary->Vx();
 			Vy[0] = primary->Vy();
 			Vz[0] = primary->Vz();
+
+
+
 			if (primary->GetFirstDaughter() <= 0 && primary->GetLastDaughter() <= 0)
+			{
 				cout << "No daughter tracks... " << endl;
+			}
 			else
 			{
 				Int_t iTrk = 1;
@@ -288,11 +307,12 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 						Vz[iTrk] = part->Vz();
 					}
 					else
-						cout << "WARNING: too many daughters" << endl;
-
-					if (part->GetPdgCode() == 22 && part->GetFirstDaughter() >= 0)
 					{
-						// check conversion
+						cout << "WARNING: too many daughters" << endl;
+					}
+
+					if (part->GetPdgCode() == 22 && part->GetFirstDaughter() >= 0) // if the particle is a photon
+					{
 						auto cdaughter = stack->Particle(part->GetFirstDaughter());
 						if (cdaughter->Vz() < z_FOCAL_front)
 						{
@@ -303,29 +323,45 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 						cVz[iTrk] = cdaughter->Vz();
 					}
 					iTrk++;
-				}
-			}
 
-			//          // Call the digitizer
+				}// end of loop over daughters
+
+			}// End of if statement for daughters
+
+
+
+
+			// Call the digitizer //
 			digitizer->Hits2Digits(treeH->GetBranch("FOCAL"));
+
+			
+			// Get the digits//
 			TClonesArray *digitsArray = digitizer->GetSDigits();
-			//
-			//	        //
+
+
+			// Creating the histograms //
 			TH2F **histograms = new TH2F *[nSegments];
 			TH1D **histograms1D = new TH1D *[nSegments];
+
+
+			// Getting the Row, column and segment info //
 			Int_t nCol, nRow;
 			Float_t sizeX = geometry->GetFOCALSizeX();
 			Float_t sizeY = geometry->GetFOCALSizeY();
 
+
+
 			char name[20] = "Original";
 			char name2[20] = "Projection";
+
+
 
 			for (Int_t i = 0; i < nSegments; i++)
 			{
 				geometry->GetVirtualNColRow(i, nCol, nRow);
 				Float_t x0, y0, z0, r;
 				z0 = geometry->GetVirtualSegmentZ(i);
-				r = TMath::Tan(theta[0]) * z0; // Phi = 0 && x = 1 && y = 0;
+				r = TMath::Tan(theta[0]) * z0;
 				x0 = TMath::Cos(phi[0]) * r;
 				y0 = TMath::Sin(phi[0]) * r;
 				histograms[i] = new TH2F(Form("%s_%i_%i_%i", name, nfolder, ievt, i), Form("%s_%i_%i_%i", name, nfolder, ievt, i), nCol * 2 * infoParameterHistRadius / sizeX, x0 - infoParameterHistRadius, x0 + infoParameterHistRadius, nRow * 2 * infoParameterHistRadius / sizeY, y0 - infoParameterHistRadius, y0 + infoParameterHistRadius);
@@ -343,6 +379,8 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 				colSeed[iSeg] = -1;
 				ampSeed[iSeg] = -1;
 			}
+
+
 			TObjArray digitsForProfile;
 
 			for (Int_t i = 0; i < digitsArray->GetEntries(); i++)
@@ -362,11 +400,10 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 				geometry->GetXYZFromColRowSeg(col, row, segment, x, y, z);
 				Int_t energy = digit->GetAmp();
 				histograms[segment]->Fill(x, y, (Float_t)energy);
-				//		        histograms1D[segment]->Fill(x,(Float_t)energy);
+
 
 				// prepare for profiles
-				if (TMath::Abs(x - x0) < profileRadius &&
-					TMath::Abs(y - y0) < profileRadius)
+				if (TMath::Abs(x - x0) < profileRadius && TMath::Abs(y - y0) < profileRadius)
 				{
 					digitsForProfile.AddLast(digit);
 					if (energy > ampSeed[segment])
@@ -376,7 +413,10 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 						ampSeed[segment] = energy;
 					}
 				}
-			}
+			}// End of loop over digits
+
+
+
 
 			// Fill profiles
 			//
@@ -451,7 +491,7 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 
 				geometry->GetVirtualNColRow(i, nCol, nRow);
 				Int_t yBin = nRow * infoParameterHistRadius / sizeY / 2;
-				histograms1D[i] = histograms[i]->ProjectionX(Form("%s_%i", name2, i), yBin, yBin);
+				histograms1D[i] = histograms[i]->ProjectionX(Form("%s_%i", name2, i),yBin, yBin);
 				histograms1D[i]->SetStats(0);
 				TF1 *fc1D = new TF1("cauchy1D", "[2]/(1+TMath::Power((x-[0]),2)/([1]*[1]))", x0 - infoParameterFitRadius, x0 + infoParameterFitRadius);
 				fc1D->SetParameters(x0, infoParameterSigma, 1);
@@ -496,8 +536,9 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 				histograms[i]->Delete();
 				histograms1D[i]->Delete();
 			}
-			// Fill the ttree
-			tInfo->Fill();
+
+
+			tInfo->Fill(); // Fill the tree
 
 			delete[] rowSeed;
 			delete[] colSeed;
@@ -506,19 +547,18 @@ void MCInfo(Int_t startFolder, Int_t endFolder, Int_t startEvent, Int_t endEvent
 			delete[] histograms;
 			delete[] histograms1D;
 
-		} // end events
+		} // End of loop over Events
 
 		f->cd();
-		// tInfo->Write();
 		f->Write();
 		f->Close();
 
 		delete[] showProf2D;
 		delete[] showProf1D;
 		delete[] showProf1D_dEdr;
-
 		fRunLoader->Delete();
-	} // end folders
+
+	} // End of loop over folders
 
 	delete digitizer;
 	delete[] maxE;

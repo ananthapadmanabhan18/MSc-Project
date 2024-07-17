@@ -10,7 +10,7 @@ detector="FOCAL"
 uid="1"
 simulation="NoDigitization"
 geometry_location="GeometryFiles/geometry.txt"
-nevents="10"
+nevents="5"
 generator="Upgrade:FOCAL_Generators:boxMomUniform"
 pdg="111"
 etamin="3.4"
@@ -24,10 +24,6 @@ do
   echo "#############################"
   echo "#  Running simulation: $i   #"
   echo "#############################"
-
-
-
-
 
   ####################
   #    Target_DIR    #
@@ -55,13 +51,12 @@ do
   echo "Pt range              :       $ptmin - $ptmax"
 
 
+  ##########################
+  #     Run Simulation     #
+  ##########################
+  /home/apmnair18/alice/sw/ubuntu2204_x86-64/AliDPG/master-local1/bin/aliroot_dpgsim.sh --run $run --mode $mode --detector $detector --uid $uid --nevents $nevents --generator $generator --simulation $simulation --focalGeometryFile $geometry_location --pdg $pdg --etamin $etamin --etamax $etamax --ptmin $ptmin --ptmax $ptmax
 
-  ###############################################
-  # Move the GRP folder to the target directory #
-  ###############################################
-  if [ -d "$SOURCE_DIR/GRP" ]; then
-    mv "$SOURCE_DIR/GRP" "$TARGET_DIR/"
-  fi
+
 
 
   ######################################################
@@ -74,9 +69,7 @@ do
     fi
   done
   mv "$SOURCE_DIR/grpdump.sh" "$TARGET_DIR/"
-
-  # echo "$SOURCE_DIR/grpdump.sh"
-
+  mv "$SOURCE_DIR/GRP" "$TARGET_DIR/"
   mv "$SOURCE_DIR/gphysi.dat" "$TARGET_DIR/"
   mv "$SOURCE_DIR/sim.log" "$TARGET_DIR/"
   mv "$SOURCE_DIR/simwatch.log" "$TARGET_DIR/"
